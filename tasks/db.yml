@@ -1,0 +1,30 @@
+---
+- name: "Install postgresql"
+  become: true
+  when: funkwhale_database_managed
+  package:
+    name:
+      - postgresql
+      - python-psycopg2
+
+- name: "Start Postgresql"
+  when: funkwhale_database_managed
+  service:
+    name: postgresql
+    state: started
+
+- name: "Create {{ funkwhale_database_name }} database"
+  become: true
+  become_user: postgres
+  when: funkwhale_database_managed
+  postgresql_db:
+    name: "{{ funkwhale_database_name }}"
+    encoding: UTF-8
+
+- name: "Create {{ funkwhale_database_user }} database user"
+  become: true
+  become_user: postgres
+  when: funkwhale_database_managed
+  postgresql_user:
+    db: "{{ funkwhale_database_name }}"
+    name: "{{ funkwhale_database_user }}"

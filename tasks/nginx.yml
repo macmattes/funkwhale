@@ -1,0 +1,13 @@
+---
+- name: "Install nginx"
+  become: true
+  when: funkwhale_nginx_managed
+  package:
+    name:
+      - nginx
+
+- name: "Start Nginx"
+  when: funkwhale_nginx_managed
+  service:
+    name: nginx
+    state: started

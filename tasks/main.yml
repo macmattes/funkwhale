@@ -1,5 +1,5 @@
 ---
-# tasks file for funkwhale
-- name: Molecule Hello World!
-  debug:
-    msg: Hello, World!
+- include: packages.yml
+- include: db.yml
+- include: redis.yml
+- include: nginx.yml

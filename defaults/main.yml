@@ -1,2 +1,10 @@
 ---
 # defaults file for funkwhale
+funkwhale_install_path: /srv/funkwhale
+funkwhale_data_path: /srv/funkwhale/data
+funkwhale_username: funkwhale
+funkwhale_database_managed: true
+funkwhale_database_name: funkwhale
+funkwhale_database_user: funkwhale
+funkwhale_nginx_managed: true
+funkwhale_redis_managed: true

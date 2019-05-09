@@ -7,7 +7,14 @@ lint:
   name: yamllint
 platforms:
   - name: instance
-    image: debian:9
+    image: alehaa/debian-systemd:stretch
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
 provisioner:
   name: ansible
   lint:
@@ -16,3 +23,4 @@ verifier:
   name: testinfra
   lint:
     name: flake8
+    enabled: False
