@@ -5,3 +5,11 @@
     # our directory name is not "funkwhale" so molecule can't find the role
     # https://github.com/ansible/molecule/issues/1567#issuecomment-436876722
     - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+      vars:
+        funkwhale_hostname: yourdomain.funkwhale
+        funkwhale_protocol: https
+        funkwhale_env_vars:
+          - EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587
+          - DEFAULT_FROM_EMAIL=noreply@yourdomain
+          - ADDITIONAL_VAR=1
+          - ADDITIONAL_VAR=2

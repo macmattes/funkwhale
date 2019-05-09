@@ -1,0 +1,32 @@
+---
+
+
+
+- name: "Create funkwhale user"
+  user:
+    name: "{{ funkwhale_username }}"
+    shell: /bin/false
+    home: "{{ funkwhale_install_path }}"
+
+- name: "Create funkwhale directories"
+  become: true
+  file:
+    path: "{{ item }}"
+    owner: "{{ funkwhale_username }}"
+    state: directory
+    recurse: true
+  with_items:
+    - "{{ funkwhale_install_path }}"
+    - "{{ funkwhale_media_path }}"
+    - "{{ funkwhale_static_path }}"
+    - "{{ funkwhale_music_path }}"
+    - "{{ funkwhale_config_path }}"
+
+- name: "Create funkwhale configuration file"
+  become: true
+  template:
+    src: env.j2
+    dest: "{{ funkwhale_config_path }}/.env"
+    owner: "{{ funkwhale_username }}"
+  vars:
+    secret_key: secret_key
