@@ -28,3 +28,16 @@
   postgresql_user:
     db: "{{ funkwhale_database_name }}"
     name: "{{ funkwhale_database_user }}"
+
+- name: "Grant privileges on database {{ funkwhale_database_name }} to {{ funkwhale_database_user }} user"
+  when: funkwhale_database_managed
+  become: true
+  become_user: postgres
+  command: psql -c "GRANT ALL PRIVILEGES ON DATABASE {{ funkwhale_database_name }} TO {{ funkwhale_database_user }}"
+
+
+- name: "Create unaccent extension"
+  when: funkwhale_database_managed
+  become: true
+  become_user: postgres
+  command: psql {{ funkwhale_database_name }} -c "CREATE EXTENSION IF NOT EXISTS unaccent"
