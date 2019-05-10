@@ -3,7 +3,7 @@
 - name: "Create {{ funkwhale_systemd_service_name }}-* systemd file"
   become: true
   template:
-    src: "funkwhale-process.service"
+    src: "funkwhale-process.service.j2"
     dest: "/etc/systemd/system/{{ funkwhale_systemd_service_name }}-{{ item.name }}.service"
     mode: 0600
   with_items:
@@ -22,7 +22,7 @@
 - name: "Create {{ funkwhale_systemd_service_name }} systemd target file"
   become: true
   template:
-    src: "{{ funkwhale_systemd_service_name }}.target"
+    src: "{{ funkwhale_systemd_service_name }}.target.j2"
     dest: "/etc/systemd/system/{{ funkwhale_systemd_service_name }}.target"
     mode: 0600
   notify:
