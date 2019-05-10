@@ -1,2 +1,5 @@
 ---
-# handlers file for funkwhale
+- name: restart funkwhale
+  service:
+    name: funkwhale.target
+    state: restarted

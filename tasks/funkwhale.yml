@@ -55,6 +55,8 @@
     mode: 0600
   vars:
     django_secret_key: "{{ secret_key['content'] | b64decode }}"
+  notify:
+    - restart funkwhale
 
 - name: Download front-end files
   become: true
@@ -63,7 +65,8 @@
     src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_front
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
-
+  notify:
+    - restart funkwhale
 
 - name: Download api files
   become: true
@@ -72,6 +75,8 @@
     src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_api
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
+  notify:
+    - restart funkwhale
 
 - name: "Setup virtualenv"
   become: true
@@ -81,7 +86,6 @@
     virtualenv: "{{ funkwhale_install_path }}/virtualenv"
     virtualenv_python: python3
 
-
 - name: "Install python dependencies"
   become: true
   become_user: "{{ funkwhale_username }}"
@@ -89,7 +93,8 @@
     requirements: "{{ funkwhale_install_path }}/api/requirements.txt"
     virtualenv: "{{ funkwhale_install_path }}/virtualenv"
     virtualenv_python: python3
-
+  notify:
+    - restart funkwhale
 
 - name: "Collect static files"
   command: "{{ funkwhale_install_path }}/virtualenv/bin/python api/manage.py collectstatic --no-input"
@@ -97,7 +102,6 @@
   become_user: "{{ funkwhale_username }}"
   args:
     chdir: "{{ funkwhale_install_path }}"
-
 
 - name: "Apply database migrations"
   become: true

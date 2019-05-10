@@ -1,6 +1,7 @@
 ---
-# - include: packages.yml
-# - include: db.yml
-# - include: redis.yml
+- include: packages.yml
+- include: db.yml
+- include: redis.yml
 - include: funkwhale.yml
+- include: services.yml
 - include: nginx.yml

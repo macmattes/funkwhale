@@ -119,3 +119,13 @@ def test_migrations_applied(host):
     """
     result = host.run(cmd)
     assert result.stdout == "1"
+
+
+@pytest.mark.parametrize(
+    "service",
+    ["funkwhale-server", "funkwhale-worker", "funkwhale-beat", "funkwhale.target"],
+)
+def test_funkwhale_services(service, host):
+    service = host.service(service)
+    assert service.is_running
+    assert service.is_enabled
