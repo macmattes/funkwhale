@@ -20,6 +20,31 @@
     - "{{ funkwhale_music_path }}"
     - "{{ funkwhale_config_path }}"
 
+- name: Check if django_secret_key file is setup
+  stat:
+    path: "{{ funkwhale_config_path }}/django_secret_key"
+  register: "result_django_secret_key"
+
+- name: "Generate a random secret key"
+  when: result_django_secret_key.stat.exists == False
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  command: "openssl rand -hex 25"
+  register: result_secret_key_generation
+
+- name: "Create django_secret_key file"
+  when: result_django_secret_key.stat.exists == False
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  copy:
+    content: "{{ result_secret_key_generation.stdout }}"
+    dest: "{{ funkwhale_config_path }}/django_secret_key"
+
+- name: "Retrieve secret key from {{ funkwhale_config_path }}/django_secret_key"
+  slurp:
+    src: "{{ funkwhale_config_path }}/django_secret_key"
+  register: secret_key
+
 - name: "Create funkwhale configuration file"
   become: true
   become_user: "{{ funkwhale_username }}"
@@ -27,8 +52,9 @@
     src: env.j2
     dest: "{{ funkwhale_config_path }}/.env"
     owner: "{{ funkwhale_username }}"
+    mode: 0600
   vars:
-    secret_key: secret_key
+    django_secret_key: "{{ secret_key['content'] | b64decode }}"
 
 - name: Download front-end files
   become: true

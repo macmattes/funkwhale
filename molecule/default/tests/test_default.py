@@ -55,35 +55,32 @@ def test_funkwhale_directories_creation(path, host):
 
 
 def test_funkwhale_env_file(host):
+    secret_key = host.file("/srv/funkwhale/config/django_secret_key").content.decode()
+    assert len(secret_key) > 0
     f = host.file("/srv/funkwhale/config/.env")
-
-    assert f.contains("MEDIA_ROOT=/srv/funkwhale/data/media") is True
-    assert f.contains("STATIC_ROOT=/srv/funkwhale/data/static") is True
-    assert f.contains("MUSIC_DIRECTORY_PATH=/srv/funkwhale/data/music") is True
-    assert f.contains("MUSIC_DIRECTORY_SERVE_PATH=/srv/funkwhale/data/music") is True
-    assert f.contains("FUNKWHALE_HOSTNAME=yourdomain.funkwhale") is True
-    assert f.contains("FUNKWHALE_PROTOCOL=https") is True
-    assert f.contains("DJANGO_SECRET_KEY=") is True
-    assert f.contains("FUNKWHALE_API_IP=127.0.0.1") is True
-    assert f.contains("FUNKWHALE_API_PORT=5000") is True
-    assert f.contains("REVERSE_PROXY_TYPE=nginx") is True
-    assert f.contains("DATABASE_URL=postgresql://funkwhale@:5432/funkwhale") is True
-    assert f.contains("CACHE_URL=redis://127.0.0.1:6379/0") is True
-    assert (
-        f.contains("EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587") is True
-    )
-    assert f.contains("DEFAULT_FROM_EMAIL=noreply@yourdomain") is True
-    assert f.contains("FUNKWHALE_FRONTEND_PATH=/srv/funkwhale/front/dist") is True
-    assert (
-        f.contains("FUNKWHALE_SPA_HTML_ROOT=/srv/funkwhale/front/dist/index.html")
-        is True
-    )
-    assert f.contains("NGINX_MAX_BODY_SIZE=100M") is True
-    assert f.contains("DJANGO_SETTINGS_MODULE=config.settings.production") is True
+    env_content = f.content.decode()
+    assert "MEDIA_ROOT=/srv/funkwhale/data/media" in env_content
+    assert "STATIC_ROOT=/srv/funkwhale/data/static" in env_content
+    assert "MUSIC_DIRECTORY_PATH=/srv/funkwhale/data/music" in env_content
+    assert "MUSIC_DIRECTORY_SERVE_PATH=/srv/funkwhale/data/music" in env_content
+    assert "FUNKWHALE_HOSTNAME=yourdomain.funkwhale" in env_content
+    assert "FUNKWHALE_PROTOCOL=https" in env_content
+    assert "DJANGO_SECRET_KEY={}".format(secret_key) in env_content
+    assert "FUNKWHALE_API_IP=127.0.0.1" in env_content
+    assert "FUNKWHALE_API_PORT=5000" in env_content
+    assert "REVERSE_PROXY_TYPE=nginx" in env_content
+    assert "DATABASE_URL=postgresql://funkwhale@:5432/funkwhale" in env_content
+    assert "CACHE_URL=redis://127.0.0.1:6379/0" in env_content
+    assert "EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587" in env_content
+    assert "DEFAULT_FROM_EMAIL=noreply@yourdomain" in env_content
+    assert "FUNKWHALE_FRONTEND_PATH=/srv/funkwhale/front/dist" in env_content
+    assert "FUNKWHALE_SPA_HTML_ROOT=/srv/funkwhale/front/dist/index.html" in env_content
+    assert "NGINX_MAX_BODY_SIZE=100M" in env_content
+    assert "DJANGO_SETTINGS_MODULE=config.settings.production" in env_content
 
     # additional vars
-    assert f.contains("ADDITIONAL_VAR=1") is True
-    assert f.contains("ADDITIONAL_VAR=2") is True
+    assert "ADDITIONAL_VAR=1" in env_content
+    assert "ADDITIONAL_VAR=2" in env_content
 
 
 def test_frontend_download(host):
