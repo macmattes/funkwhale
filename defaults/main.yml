@@ -5,7 +5,6 @@ funkwhale_media_path: /srv/funkwhale/data/media
 funkwhale_static_path: /srv/funkwhale/data/static
 funkwhale_music_path: /srv/funkwhale/data/music
 funkwhale_config_path: /srv/funkwhale/config
-funkwhale_frontend_path: /srv/funkwhale/frontend/dist
 funkwhale_username: funkwhale
 funkwhale_database_managed: true
 funkwhale_database_name: funkwhale

@@ -73,9 +73,9 @@ def test_funkwhale_env_file(host):
         f.contains("EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587") is True
     )
     assert f.contains("DEFAULT_FROM_EMAIL=noreply@yourdomain") is True
-    assert f.contains("FUNKWHALE_FRONTEND_PATH=/srv/funkwhale/frontend/dist") is True
+    assert f.contains("FUNKWHALE_FRONTEND_PATH=/srv/funkwhale/front/dist") is True
     assert (
-        f.contains("FUNKWHALE_SPA_HTML_ROOT=/srv/funkwhale/frontend/dist/index.html")
+        f.contains("FUNKWHALE_SPA_HTML_ROOT=/srv/funkwhale/front/dist/index.html")
         is True
     )
     assert f.contains("NGINX_MAX_BODY_SIZE=100M") is True
@@ -84,3 +84,16 @@ def test_funkwhale_env_file(host):
     # additional vars
     assert f.contains("ADDITIONAL_VAR=1") is True
     assert f.contains("ADDITIONAL_VAR=2") is True
+
+
+def test_frontend_download(host):
+    f = host.file("/srv/funkwhale/front/dist/index.html")
+
+    assert f.exists is True
+
+
+def test_api_download(host):
+    f = host.file("/srv/funkwhale/api/funkwhale_api/__init__.py")
+
+    assert f.exists is True
+    assert f.contains('__version__ = "0.19.0-rc2"') is True

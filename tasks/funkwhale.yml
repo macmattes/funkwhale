@@ -24,9 +24,27 @@
 
 - name: "Create funkwhale configuration file"
   become: true
+  become_user: "{{ funkwhale_username }}"
   template:
     src: env.j2
     dest: "{{ funkwhale_config_path }}/.env"
     owner: "{{ funkwhale_username }}"
   vars:
     secret_key: secret_key
+
+- name: Download front-end files
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  unarchive:
+    src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_front
+    dest: "{{ funkwhale_install_path }}"
+    remote_src: true
+
+
+- name: Download api files
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  unarchive:
+    src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_api
+    dest: "{{ funkwhale_install_path }}"
+    remote_src: true

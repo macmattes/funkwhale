@@ -8,6 +8,7 @@
       vars:
         funkwhale_hostname: yourdomain.funkwhale
         funkwhale_protocol: https
+        funkwhale_version: 0.19.0-rc2
         funkwhale_env_vars:
           - EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587
           - DEFAULT_FROM_EMAIL=noreply@yourdomain
