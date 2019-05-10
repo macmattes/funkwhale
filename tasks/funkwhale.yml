@@ -74,6 +74,8 @@
     remote_src: true
 
 - name: "Setup virtualenv"
+  become: true
+  become_user: "{{ funkwhale_username }}"
   pip:
     name: wheel
     virtualenv: "{{ funkwhale_install_path }}/virtualenv"
@@ -81,7 +83,25 @@
 
 
 - name: "Install python dependencies"
+  become: true
+  become_user: "{{ funkwhale_username }}"
   pip:
     requirements: "{{ funkwhale_install_path }}/api/requirements.txt"
     virtualenv: "{{ funkwhale_install_path }}/virtualenv"
     virtualenv_python: python3
+
+
+- name: "Collect static files"
+  command: "{{ funkwhale_install_path }}/virtualenv/bin/python api/manage.py collectstatic --no-input"
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  args:
+    chdir: "{{ funkwhale_install_path }}"
+
+
+- name: "Apply database migrations"
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  command: "{{ funkwhale_install_path }}/virtualenv/bin/python api/manage.py migrate --no-input"
+  args:
+    chdir: "{{ funkwhale_install_path }}"

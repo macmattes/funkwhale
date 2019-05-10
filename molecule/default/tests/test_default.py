@@ -105,3 +105,17 @@ def test_virtualenv(host):
 
     intersection = expected_packages & names
     assert intersection == expected_packages
+
+
+def test_static_files_copied(host):
+    f = host.file("/srv/funkwhale/data/static/admin/css/base.css")
+
+    assert f.exists is True
+
+
+def test_migrations_applied(host):
+    cmd = """
+        sudo -u postgres psql funkwhale -A -t -c "SELECT 1 from django_migrations where app = 'music' and name = '0039_auto_20190423_0820';"
+    """
+    result = host.run(cmd)
+    assert result.stdout == "1"
