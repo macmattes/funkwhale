@@ -1,7 +1,5 @@
 ---
 
-
-
 - name: "Create funkwhale user"
   user:
     name: "{{ funkwhale_username }}"
@@ -48,3 +46,16 @@
     src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_api
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
+
+- name: "Setup virtualenv"
+  pip:
+    name: wheel
+    virtualenv: "{{ funkwhale_install_path }}/virtualenv"
+    virtualenv_python: python3
+
+
+- name: "Install python dependencies"
+  pip:
+    requirements: "{{ funkwhale_install_path }}/api/requirements.txt"
+    virtualenv: "{{ funkwhale_install_path }}/virtualenv"
+    virtualenv_python: python3

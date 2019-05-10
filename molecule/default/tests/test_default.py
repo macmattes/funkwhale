@@ -97,3 +97,14 @@ def test_api_download(host):
 
     assert f.exists is True
     assert f.contains('__version__ = "0.19.0-rc2"') is True
+
+
+def test_virtualenv(host):
+    expected_packages = {"Django", "djangorestframework", "celery"}
+    packages = host.pip_package.get_packages(
+        pip_path="/srv/funkwhale/virtualenv/bin/pip"
+    )
+    names = set(packages.keys())
+
+    intersection = expected_packages & names
+    assert intersection == expected_packages
