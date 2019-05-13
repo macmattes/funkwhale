@@ -32,6 +32,7 @@ Create a playbook requirements and inventory file:
     touch requirements.yml
     touch playbook.yml
     touch inventory.ini
+    ansible.cfg
 
 Add the following to `requirements.yml`:
 
@@ -45,6 +46,15 @@ Install the role:
 
 ```
 ansible-galaxy install -r requirements.yml
+```
+
+Add the following to `ansible.cfg`:
+
+```
+[defaults]
+# Needed to use become with unprevileged users,
+# see https://docs.ansible.com/ansible/latest/user_guide/become.html#becoming-an-unprivileged-user
+allow_world_readable_tmpfiles=true
 ```
 
 Add the following to `playbook.yml`:

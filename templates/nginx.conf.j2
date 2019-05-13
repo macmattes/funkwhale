@@ -23,8 +23,8 @@ server {
     ssl_certificate {{ funkwhale_ssl_cert_path }};
     ssl_certificate_key {{ funkwhale_ssl_key_path }};
     {% else -%}
-    ssl_certificate /ect/lectsencrypt/live/{{ funkwhale_hostname }}/fullchain.pem;
-    ssl_certificate_key /ect/lectsencrypt/live/{{ funkwhale_hostname }}/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ funkwhale_hostname }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ funkwhale_hostname }}/privkey.pem;
     {% endif -%}
     # from https://cipherli.st/
     ssl_prefer_server_ciphers on;
