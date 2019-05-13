@@ -83,7 +83,7 @@ This roles has no other dependencies.
 License
 -------
 
-BSD
+AGPL3
 
 Author Information
 ------------------
