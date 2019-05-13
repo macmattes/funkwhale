@@ -30,6 +30,7 @@
 
 - name: "Start and enable {{ funkwhale_systemd_service_name }}-* services"
   when: funkwhale_nginx_managed
+  become: true
   systemd:
     name: "{{ item }}"
     enabled: true

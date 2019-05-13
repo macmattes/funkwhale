@@ -1,7 +1,13 @@
 ---
 - include: packages.yml
+  tags: [packages]
 - include: db.yml
+  tags: [db]
 - include: redis.yml
+  tags: [redis]
 - include: funkwhale.yml
+  tags: [funkwhale]
 - include: services.yml
+  tags: [services]
 - include: nginx.yml
+  tags: [nginx]

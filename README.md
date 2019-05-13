@@ -13,13 +13,44 @@ Using this role, you can install and upgrade a Funkwhale pod, closely matching o
 - Install and configure Funkwhale and it's dependencies
 - Install and configure a SSL certificate with Let's Encrypt (optional)
 
-Usage
------
+Installation and usage
+----------------------
 
-Add the following to your playbook:
+Install ansible:
+
+```
+pip install --user ansible
+```
+
+Create a directory for ansible files:
+
+    mkdir ~/ansible-funkwhale
+    cd ansible-funkwhale
+
+Create a playbook requirements and inventory file:
+
+    touch requirements.yml
+    touch playbook.yml
+    touch inventory.ini
+
+Add the following to `requirements.yml`:
+
+```
+- src: git+https://dev.funkwhale.audio/funkwhale/ansible
+  name: funkwhale
+  version: master
+```
+
+Install the role:
+
+```
+ansible-galaxy install -r requirements.yml
+```
+
+Add the following to `playbook.yml`:
 
 ```yaml
-- hosts: servers
+- hosts: funkwhale-servers
   roles:
     - role: funkwhale
       funkwhale_hostname: yourdomain.funkwhale
@@ -28,6 +59,24 @@ Add the following to your playbook:
 ```
 
 See below for a full documentation on available variables.
+
+Add your server to `inventory.ini`:
+
+```ini
+[funkwhale-servers]
+your-server-ip-or-domain
+```
+
+Launch the installation (in check mode, so nothing is applied):
+
+```
+ansible-playbook --ask-become-pass -i inventory.ini playbook.yml --check --diff
+```
+*On some hosts, you may need to install the `python-apt` package for check mode to work*.
+
+This command will show you the changes that would be applied to your system. If you are confortable with them,
+rerun the same command without the `--check` flag.
+
 
 Role Variables
 --------------

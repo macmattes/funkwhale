@@ -1,6 +1,7 @@
 ---
 
 - name: "Create funkwhale user"
+  become: true
   user:
     name: "{{ funkwhale_username }}"
     shell: /bin/false
@@ -33,17 +34,28 @@
   register: result_secret_key_generation
 
 - name: "Create django_secret_key file"
-  when: result_django_secret_key.stat.exists == False
+  when: not ansible_check_mode and result_django_secret_key.stat.exists == False
   become: true
   become_user: "{{ funkwhale_username }}"
   copy:
     content: "{{ result_secret_key_generation.stdout }}"
     dest: "{{ funkwhale_config_path }}/django_secret_key"
 
+- name: "Setup a dummy secret key"
+  when: ansible_check_mode
+  set_fact:
+    django_secret_key: "dummy_secret_key_for_check_mode"
+
 - name: "Retrieve secret key from {{ funkwhale_config_path }}/django_secret_key"
+  when: not ansible_check_mode
   slurp:
     src: "{{ funkwhale_config_path }}/django_secret_key"
   register: secret_key
+
+- name: "Register secret key"
+  when: not ansible_check_mode
+  set_fact:
+    django_secret_key: "{{ secret_key['content'] | b64decode }}"
 
 - name: "Create funkwhale configuration file"
   become: true
@@ -53,8 +65,6 @@
     dest: "{{ funkwhale_config_path }}/.env"
     owner: "{{ funkwhale_username }}"
     mode: 0600
-  vars:
-    django_secret_key: "{{ secret_key['content'] | b64decode }}"
   notify:
     - restart funkwhale
 
