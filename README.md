@@ -139,6 +139,12 @@ Dependencies
 
 This roles has no other dependencies.
 
+Todo
+----
+
+- Backups
+- Superuser creation
+
 License
 -------
 
