@@ -18,3 +18,5 @@
       - "libmagic-dev"
       - "libpq-dev"
       - "postgresql-client"
+      # not strictly needed but useful
+      - "curl"

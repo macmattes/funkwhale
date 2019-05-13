@@ -1,6 +1,6 @@
+import json
 import os
 import pytest
-
 import testinfra.utils.ansible_runner
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
@@ -129,3 +129,28 @@ def test_funkwhale_services(service, host):
     service = host.service(service)
     assert service.is_running
     assert service.is_enabled
+
+
+def test_certbot_auto_installed(host):
+    assert host.find_command("certbot-auto") == "/usr/local/bin/certbot-auto"
+
+
+def test_nginx_configuration(host):
+    f = host.file("/etc/nginx/sites-enabled/yourdomain.funkwhale.conf")
+    assert f.exists is True
+    content = f.content.decode()
+    assert "ssl_certificate /certs/test.crt;" in content
+    assert "ssl_certificate_key /certs/test.key;" in content
+
+
+def test_e2e_front(host):
+    command = 'curl -k https://localhost --header "Host: yourdomain.funkwhale"'
+    result = host.run(command)
+    assert '<meta content="Funkwhale" property="og:site_name" />' in result.stdout
+
+
+def test_e2e_api(host):
+    command = 'curl -k https://localhost/api/v1/instance/nodeinfo/2.0/ --header "Host: yourdomain.funkwhale"'
+    payload = host.run(command).stdout
+    data = json.loads(payload)
+    assert data["software"]["version"] == "0.19.0-rc2"

@@ -7,7 +7,55 @@
       - nginx
 
 - name: "Start Nginx"
+  become: true
   when: funkwhale_nginx_managed
   service:
     name: nginx
     state: started
+
+# from https://gist.github.com/mattiaslundberg/ba214a35060d3c8603e9b1ec8627d349
+- name: "Download certbot-auto"
+  when: funkwhale_nginx_managed and funkwhale_letsencrypt_enabled
+  become: true
+  get_url:
+    url: https://dl.eff.org/certbot-auto
+    dest: /usr/local/bin/certbot-auto
+    mode: 0750
+
+- name: "Install certbot using certbot-auto"
+  when: funkwhale_nginx_managed and funkwhale_letsencrypt_enabled
+  become: true
+  command: certbot-auto --install-only -n -v
+
+- name: Create letsencrypt certificate
+  when: funkwhale_nginx_managed and funkwhale_letsencrypt_enabled and not funkwhale_letsencrypt_skip_cert
+  become: true
+  command: certbot-auto -v -n certonly --nginx -m {{ funkwhale_letsencrypt_email }} --agree-tos -d {{ funkwhale_hostname }} {{ funkwhale_letsencrypt_certbot_flags }}
+  args:
+    creates: /etc/letsencrypt/live/{{ funkwhale_hostname }}
+
+- name: Add letsencrypt cronjob for cert renewal
+  when: funkwhale_nginx_managed and funkwhale_letsencrypt_enabled and not funkwhale_letsencrypt_skip_cert
+  become: true
+  cron:
+    name: funkwhale_letsencrypt_renewal
+    special_time: weekly
+    job: certbot-auto -v -n --renew certonly --nginx -m {{ funkwhale_letsencrypt_email }} --agree-tos -d {{ funkwhale_hostname }} {{ funkwhale_letsencrypt_certbot_flags }}
+
+- name: "Create funkwhale proxy file"
+  when: funkwhale_nginx_managed
+  become: true
+  template:
+    src: funkwhale_proxy.conf.j2
+    dest: "/etc/nginx/funkwhale_proxy.conf"
+  notify:
+    - reload nginx
+
+- name: "Create funkwhale vhost file"
+  when: funkwhale_nginx_managed
+  become: true
+  template:
+    src: nginx.conf.j2
+    dest: "/etc/nginx/sites-enabled/{{ funkwhale_hostname }}.conf"
+  notify:
+    - reload nginx
