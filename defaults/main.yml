@@ -15,6 +15,7 @@ funkwhale_nginx_max_body_size: 100M
 funkwhale_redis_managed: true
 funkwhale_api_ip: 127.0.0.1
 funkwhale_api_port: 5000
+funkwhale_protocol: https
 funkwhale_settings_module: config.settings.production
 funkwhale_env_vars: []
 funkwhale_systemd_after: redis.service postgresql.service

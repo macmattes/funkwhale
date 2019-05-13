@@ -1,12 +1,13 @@
 ---
 galaxy_info:
-  author: Eliot Berriot
+  role_name: funkwhale
+  author: funkwhale
   description: An ansible role to install a Funkwhale server (https://funkwhale.audio)
   company: Funkwhale
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
-  # issue_tracker_url: http://example.com/issue/tracker
+  issue_tracker_url: https://dev.funkwhale.audio/funkwhale/ansible/issues
 
   # Some suggested licenses:
   # - BSD (default)
@@ -45,7 +46,14 @@ galaxy_info:
   #   - 7
   #   - 99.99
 
-  galaxy_tags: []
+  galaxy_tags:
+    - music
+    - web
+    - python
+    - python
+    - nginx
+    - letsencrypt
+    - app
   # List tags for your role here, one per line. A tag is a keyword that describes
   # and categorizes the role. Users find roles by searching for tags. Be sure to
   # remove the '[]' above, if you add tags to this list.
