@@ -13,6 +13,18 @@ Using this role, you can install and upgrade a Funkwhale pod, closely matching o
 - Install and configure Funkwhale and it's dependencies
 - Install and configure a SSL certificate with Let's Encrypt (optional)
 
+Philosophy
+----------
+
+This role strives to:
+
+- Work out-of-the box by default
+- Be modular and lightweight
+- Avoid dependencies on other ansible roles
+- Allow further customization
+- Allow running multiple Funkwhale instances on the same host
+- Avoid messing with existing software and apps on the server
+
 Installation and usage
 ----------------------
 
@@ -138,6 +150,12 @@ Dependencies
 ------------
 
 This roles has no other dependencies.
+
+Tests
+-----
+
+This role is tested using [molecule](https://molecule.readthedocs.io/en/stable/).
+We don't have CI yet, but you can run the tests with `molecule test`.
 
 Todo
 ----
