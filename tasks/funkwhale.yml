@@ -76,7 +76,7 @@
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
-    - restart funkwhale
+    - reload funkwhale
 
 - name: Download api files
   become: true
@@ -86,7 +86,7 @@
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
-    - restart funkwhale
+    - reload funkwhale
 
 - name: "Setup virtualenv"
   become: true
@@ -101,6 +101,18 @@
   become_user: "{{ funkwhale_username }}"
   pip:
     requirements: "{{ funkwhale_install_path }}/api/requirements.txt"
+    virtualenv: "{{ funkwhale_install_path }}/virtualenv"
+    virtualenv_python: python3
+  notify:
+    - reload funkwhale
+
+- name: "Install gunicorn/uvicorn"
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  pip:
+    name:
+      - gunicorn
+      - uvicorn
     virtualenv: "{{ funkwhale_install_path }}/virtualenv"
     virtualenv_python: python3
   notify:
