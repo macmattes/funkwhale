@@ -13,7 +13,6 @@
     path: "{{ item }}"
     owner: "{{ funkwhale_username }}"
     state: directory
-    recurse: true
   with_items:
     - "{{ funkwhale_install_path }}"
     - "{{ funkwhale_media_path }}"
