@@ -8,6 +8,7 @@ funkwhale_config_path: /srv/funkwhale/config
 funkwhale_external_storage_enabled: false
 funkwhale_username: funkwhale
 funkwhale_database_managed: true
+funkwhale_frontend_managed: true
 funkwhale_database_name: funkwhale
 funkwhale_database_user: funkwhale
 funkwhale_nginx_managed: true

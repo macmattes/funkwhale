@@ -38,7 +38,8 @@ server {
     add_header Strict-Transport-Security "max-age=63072000; preload";
     {% endif -%}
 
-    root {{ funkwhale_install_path }}/front/dist;
+
+    root {{ funkwhale_frontend_path }};
 
     # compression settings
     gzip on;
@@ -75,7 +76,7 @@ server {
     }
 
     location /front/ {
-        alias {{ funkwhale_install_path }}/front/dist/;
+        alias {{ funkwhale_frontend_path }}/;
         expires 30d;
         add_header Pragma public;
         add_header Cache-Control "public, must-revalidate, proxy-revalidate";

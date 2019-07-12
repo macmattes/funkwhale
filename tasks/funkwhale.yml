@@ -70,6 +70,7 @@
 - name: Download front-end files
   become: true
   become_user: "{{ funkwhale_username }}"
+  when: funkwhale_frontend_managed
   unarchive:
     src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_front
     dest: "{{ funkwhale_install_path }}"

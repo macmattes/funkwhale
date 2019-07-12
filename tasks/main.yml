@@ -1,4 +1,9 @@
 ---
+- name: "Set frontend path"
+  when: funkwhale_frontend_managed
+  set_fact:
+    funkwhale_frontend_path: "{{ funkwhale_install_path }}/front/dist"
+
 - include: packages.yml
   tags: [packages]
 - include: db.yml
