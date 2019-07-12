@@ -36,8 +36,11 @@
   command: psql -c "GRANT ALL PRIVILEGES ON DATABASE {{ funkwhale_database_name }} TO {{ funkwhale_database_user }}"
 
 
-- name: "Create unaccent extension"
+- name: "Create db extensions"
   when: funkwhale_database_managed
   become: true
   become_user: postgres
-  command: psql {{ funkwhale_database_name }} -c "CREATE EXTENSION IF NOT EXISTS unaccent"
+  command: psql {{ funkwhale_database_name }} -c "CREATE EXTENSION IF NOT EXISTS {{ item }}"
+  with_items:
+    - unaccent
+    - citext
