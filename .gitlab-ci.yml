@@ -1,0 +1,30 @@
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  image: buildpack-deps
+  variables:
+    LATEST_VERSION_URL: https://docs.funkwhale.audio/latest.txt
+  script:
+    - |
+      echo "Retrieving latest version from $LATEST_VERSION_URL"
+      funkwhale_version=$(curl -sfL $LATEST_VERSION_URL || true)
+      if [ -z "$funkwhale_version" ]; then
+          echo "Could not retrieve latest version!"
+          exit 1
+      fi
+    - echo "Latest version is $funkwhale_version"
+    - sed -i "0,/funkwhale_version_placeholder/{s/funkwhale_version_placeholder/$funkwhale_version/}" install.sh
+    - mkdir -p public
+    - cp install.sh public/
+    - cp install.sh public/index.html
+    - cp upgrade.sh public/upgrade.sh
+
+  artifacts:
+    paths:
+      - public
+  only:
+    - master@funkwhale/ansible
+  tags:
+    - docker
