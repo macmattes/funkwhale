@@ -2,7 +2,7 @@
 set -eu
 
 # This script is meant for quick & easy upgrade of Funkwhale pods installed via:
-#   $ sh -c "$(curl -sSL https://get.funkwhale.audio/)"
+#   $ sh -c "$(curl -sSL https://get.funkwhale.audio/upgrade.sh)"
 #
 # If Ansible step fails with ascii decore error, ensure you have a locale properly set on
 # your system e.g apt-get install -y locales locales-all

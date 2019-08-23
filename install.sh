@@ -200,6 +200,7 @@ do_install() {
         fi
 
         echo " - You can run management commands by calling $base_path/manage, e.g $base_path/manage import_files"
+        echo ' - To upgrade to the latest version, run: sh -c "$(curl -sSL https://get.funkwhale.audio/upgrade.sh)"'
     fi
 
 }
