@@ -44,7 +44,7 @@ Create a playbook requirements and inventory file:
     touch requirements.yml
     touch playbook.yml
     touch inventory.ini
-    ansible.cfg
+    touch ansible.cfg
 
 Add the following to `requirements.yml`:
 
