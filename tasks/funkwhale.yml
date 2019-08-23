@@ -72,7 +72,7 @@
   become_user: "{{ funkwhale_username }}"
   when: funkwhale_frontend_managed
   unarchive:
-    src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_front
+    src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_version }}/download?job=build_front
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
@@ -82,7 +82,7 @@
   become: true
   become_user: "{{ funkwhale_username }}"
   unarchive:
-    src: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/{{ funkwhale_version }}/download?job=build_api
+    src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_version }}/download?job=build_api
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
