@@ -124,6 +124,7 @@ Role Variables
 | `funkwhale_database_user`               | `funkwhale`                   | Postgresql username to login as |
 | `funkwhale_env_vars`                    | `[]`                          | List of environment variables to append to the generated `.env` file. Example: `["AWS_ACCESS_KEY_ID=myawsid", "AWS_SECRET_ACCESS_KEY=myawskey"]` |
 | `funkwhale_external_storage_enabled`    | `false`                       | If `true`, set up the proper configuration to use an extenal storage for media files |
+| `funkwhale_disable_django_admin`        | `false`                       | If `true`, returns a 403 (Forbidden) for `/api/admin` |
 | `funkwhale_install_path`                | `/srv/funkwhale`              | Path were frontend, api and virtualenv files should be stored (**no trailing slash**) |
 | `funkwhale_letsencrypt_certbot_flags`   | `null`                        | Additional flags to pass to `certbot` |
 | `funkwhale_letsencrypt_enabled`         | `true`                        | If `true`, will configure SSL with certbot and Let's Encrypt |
