@@ -132,4 +132,11 @@ server {
         # django static files
         alias {{ funkwhale_static_path }}/;
     }
+
+    {% if funkwhale_disable_django_admin -%}
+    location /api/admin/ {
+        # disable access to API admin dashboard
+        return 403;
+    }
+    {% else -%}
 }

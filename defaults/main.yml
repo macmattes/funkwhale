@@ -6,6 +6,7 @@ funkwhale_static_path: /srv/funkwhale/data/static
 funkwhale_music_path: /srv/funkwhale/data/music
 funkwhale_config_path: /srv/funkwhale/config
 funkwhale_external_storage_enabled: false
+funkwhale_disable_django_admin: false
 funkwhale_username: funkwhale
 funkwhale_database_managed: true
 funkwhale_frontend_managed: true

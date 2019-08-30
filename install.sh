@@ -89,10 +89,12 @@ setup() {
             read -p "Enter your redis configuration, (e.g redis://127.0.0.1:6379/0): "  funkwhale_redis_url
             funkwhale_systemd_after="funkwhale_systemd_after: "
         fi
+        yesno_prompt funkwhale_disable_django_admin 'Disable access to API admin dashboard?' 'no'
     else
         funkwhale_nginx_managed="true"
         funkwhale_database_managed="true"
         funkwhale_redis_managed="true"
+        funkwhale_disable_django_admin="false"
     fi
 
 
@@ -111,6 +113,9 @@ setup() {
     echo "- Manage PostgreSQL: $funkwhale_database_managed"
     if [ "$funkwhale_database_managed" = "false" ]; then
         echo "  - Custom PostgreSQL configuration: $funkwhale_database_url"
+    fi
+    if [ "$funkwhale_disable_django_admin" = "true"]; then
+        echo "- Disabled access to API admin dashboard"
     fi
 
     if [ "$is_dry_run" = "true" ]; then
@@ -255,6 +260,11 @@ EOF
 [funkwhale_servers]
 127.0.0.1 ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 EOF
+    if [ "$funkwhale_disable_django_admin" = "true" ]; then
+        cat <<EOF >>playbook.yml
+      funkwhale_disable_django_admin: true
+EOF
+    fi
     echo "[2/$total_steps] Downloading Funkwhale playbook dependencies"
     $ansible_bin_path/ansible-galaxy install -r requirements.yml -f
 
