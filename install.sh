@@ -114,7 +114,7 @@ setup() {
     if [ "$funkwhale_database_managed" = "false" ]; then
         echo "  - Custom PostgreSQL configuration: $funkwhale_database_url"
     fi
-    if [ "$funkwhale_disable_django_admin" = "true"]; then
+    if [ "$funkwhale_disable_django_admin" = "true" ]; then
         echo "- Disabled access to API admin dashboard"
     fi
 
