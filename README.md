@@ -99,6 +99,7 @@ ansible-playbook --ask-become-pass -i inventory.ini playbook.yml --check --diff
 This command will show you the changes that would be applied to your system. If you are confortable with them,
 rerun the same command without the `--check` flag.
 
+Once installation is complete, run `/srv/funkwhale/virtualenv/bin/python /srv/funkwhale/api/manage.py createsuperuser` to create your admin account.
 
 Role Variables
 --------------
