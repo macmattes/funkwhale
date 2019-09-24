@@ -205,7 +205,8 @@ do_install() {
         fi
 
         echo " - You can run management commands by calling $base_path/manage, e.g $base_path/manage import_files"
-        echo ' - To upgrade to the latest version, run: sh -c "$(curl -sSL https://get.funkwhale.audio/upgrade.sh)"'
+        echo " - Edit your pod configuration in $ansible_conf_path/playbook.yml and apply the changes with: sudo $ansible_conf_path/reconfigure"
+        echo ' - To upgrade to the latest version, run: sudo sh -c "$(curl -sSL https://get.funkwhale.audio/upgrade.sh)"'
     fi
 
 }
@@ -240,12 +241,19 @@ EOF
       funkwhale_nginx_managed: $funkwhale_nginx_managed
       funkwhale_redis_managed: $funkwhale_redis_managed
       funkwhale_database_managed: $funkwhale_database_managed
+      # Add any environment variables to the generated .env by uncommenting and editing the lines below
+      # then execute ./reconfigure
+      # funkwhale_env_vars:
+      #   - "EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587"
+      #   - "MYCUSTOM_ENV_VAR=test"
 EOF
-    if [ "$funkwhale_database_managed" = "false" ]; then
-        cat <<EOF >>playbook.yml
-      funkwhale_database_url: $funkwhale_database_url
+    cat <<EOF >reconfigure
+#!/bin/sh
+# reapply playbook with existing parameter
+# Useful if you changed some variables in playbook.yml
+exec $ansible_bin_path/ansible-playbook  -i $ansible_conf_path/inventory.ini $ansible_conf_path/playbook.yml -u root $ansible_flags
 EOF
-    fi
+    chmod +x ./reconfigure
     if [ "$funkwhale_redis_managed" = "false" ]; then
         cat <<EOF >>playbook.yml
       funkwhale_redis_url: $funkwhale_redis_url

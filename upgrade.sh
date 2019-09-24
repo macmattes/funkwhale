@@ -100,6 +100,14 @@ do_upgrade() {
         echo "  $playbook_command"
         $playbook_command
     fi
+    echo "[3/$total_steps] Adding $ansible_conf_path/reconfigure script"
+    cat <<EOF >$ansible_conf_path/reconfigure
+#!/bin/sh
+# reapply playbook with existing parameter
+# Useful if you changed some variables in playbook.yml
+exec $ansible_bin_path/ansible-playbook  -i $ansible_conf_path/inventory.ini $ansible_conf_path/playbook.yml -u root $ansible_flags
+EOF
+    chmod +x $ansible_conf_path/reconfigure
     echo
     echo "Upgrade to $funkwhale_version complete!"
     exit
