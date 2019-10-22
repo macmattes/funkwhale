@@ -141,6 +141,8 @@ Role Variables
 | `funkwhale_systemd_after`               | `redis.service postgresql.service` | Configuration used for Systemd `After=` directive. Modify it if you have a database or redis server on a separate host   |
 | `funkwhale_systemd_service_name`        | `funkwhale`                   | Name of the generated Systemd service, e.g when calling `systemctl start <xxx>` |
 | `funkwhale_username`                    | `funkwhale`                   | Username of the system user and owner of Funkwhale data, files and configuration |
+| `funkwhale_custom_pip_packages`         | `[]`                          | A list of additional python packages to download |
+| `funkwhale_custom_settings`             | ``                            | Some Python code to append to `api/config/settings/production.py`. Use funkwhale_custom_settings: |` for multiline code. |
 
 Supported platforms
 -------------------

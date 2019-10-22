@@ -106,6 +106,17 @@
   notify:
     - reload funkwhale
 
+- name: "Install custom python dependencies, if any"
+  when: funkwhale_custom_pip_packages is defined and (funkwhale_custom_pip_packages|length>0)
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  pip:
+    name: "{{ funkwhale_custom_pip_packages }}"
+    virtualenv: "{{ funkwhale_install_path }}/virtualenv"
+    virtualenv_python: python3
+  notify:
+    - reload funkwhale
+
 - name: "Install gunicorn/uvicorn"
   become: true
   become_user: "{{ funkwhale_username }}"
@@ -117,6 +128,15 @@
     virtualenv_python: python3
   notify:
     - restart funkwhale
+
+- name: Append custom settings to production.py, if any
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  blockinfile:
+    path: "{{ funkwhale_install_path }}/api/config/settings/production.py"
+    insertafter: "EOF"
+    block: "{{ funkwhale_custom_settings }}"
+
 
 - name: "Collect static files"
   command: "{{ funkwhale_install_path }}/virtualenv/bin/python api/manage.py collectstatic --no-input"

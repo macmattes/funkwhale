@@ -1,6 +1,7 @@
 ---
 - name: "Set frontend path"
   when: funkwhale_frontend_managed
+  tags: [funkwhale, nginx]
   set_fact:
     funkwhale_frontend_path: "{{ funkwhale_install_path }}/front/dist"
 
