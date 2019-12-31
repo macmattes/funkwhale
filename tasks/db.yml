@@ -20,6 +20,7 @@
   postgresql_db:
     name: "{{ funkwhale_database_name }}"
     encoding: UTF-8
+    template: template0
 
 - name: "Create {{ funkwhale_database_user }} database user"
   become: true
