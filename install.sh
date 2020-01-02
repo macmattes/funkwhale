@@ -71,14 +71,14 @@ setup() {
         read -p "Enter the username for the admin account (leave empty to skip account creation) "  funkwhale_admin_username
     fi
     if [ -z "$funkwhale_admin_email" ]; then
-        read -p "Enter the email used for the admin user and Let's Encrypt certificate: "  funkwhale_admin_email
+        read -p "Enter the email used for the admin user (and Let's Encrypt certificate): "  funkwhale_admin_email
     fi
     if [ -z "$customize_install" ]; then
-        yesno_prompt customize_install "The complete installation will setup Nginx, PostgresQL and Redis. Do you want customize what is installed?" "no"
+        yesno_prompt customize_install "The complete installation will setup Nginx, Certbot, PostgresQL and Redis. Do you want customize what is installed?" "no"
     fi
 
     if [ "$customize_install" = "true" ]; then
-        yesno_prompt funkwhale_nginx_managed 'Install and manage Nginx?' 'yes'
+        yesno_prompt funkwhale_nginx_managed 'Install and manage Nginx and Certbot?' 'yes'
         yesno_prompt funkwhale_database_managed 'Install and manage PostgreSQL?' 'yes'
         if [ "$funkwhale_database_managed" = "false" ]; then
             read -p "Enter your database configuration, (e.g postgresql://user@localhost:5432/database_name): "  funkwhale_database_url
@@ -105,7 +105,7 @@ setup() {
     echo "- domain: $funkwhale_hostname"
     echo "- Admin username: $funkwhale_admin_username"
     echo "- Admin email: $funkwhale_admin_email"
-    echo "- Manage nginx: $funkwhale_nginx_managed"
+    echo "- Manage nginx and certbot: $funkwhale_nginx_managed"
     echo "- Manage redis: $funkwhale_redis_managed"
     if [ "$funkwhale_redis_managed" = "false" ]; then
         echo "  - Custom redis configuration: $funkwhale_redis_url"
