@@ -240,7 +240,9 @@ EOF
       funkwhale_letsencrypt_email: $funkwhale_admin_email
       funkwhale_nginx_managed: $funkwhale_nginx_managed
       funkwhale_redis_managed: $funkwhale_redis_managed
+      funkwhale_redis_url: $funkwhale_redis_url
       funkwhale_database_managed: $funkwhale_database_managed
+      funkwhale_database_url: $funkwhale_database_url
       # Add any environment variables to the generated .env by uncommenting and editing the lines below
       # then execute ./reconfigure
       # funkwhale_env_vars:
