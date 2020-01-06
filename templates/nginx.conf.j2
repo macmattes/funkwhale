@@ -15,8 +15,8 @@ map $http_upgrade $connection_upgrade {
 }
 
 server {
-    listen {% if funkwhale_protocol == 'https' %}443 ssl{% else %}80{% endif %} http2;
-    listen [::]:{% if funkwhale_protocol == 'https' %}443 ssl{% else -%}80{% endif %} http2;
+    listen {% if funkwhale_protocol == 'https' %}443 ssl http2{% else %}80{% endif %};
+    listen [::]:{% if funkwhale_protocol == 'https' %}443 ssl http2{% else -%}80{% endif %};
     server_name {{ funkwhale_hostname }};
     {% if funkwhale_protocol == 'https' -%}
     {% if funkwhale_ssl_key_path -%}
