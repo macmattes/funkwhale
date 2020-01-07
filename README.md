@@ -138,6 +138,7 @@ Role Variables
 | `funkwhale_ssl_cert_path`               | ``                            | Path to an existing SSL certificate to use (use in combination with `funkwhale_letsencrypt_enabled: false`) |
 | `funkwhale_ssl_key_path`                | ``                            | Path to an existing SSL key to use (use in combination with `funkwhale_letsencrypt_enabled: false`) |
 | `funkwhale_static_path`                 | `/srv/funkwhale/data/static`  | Path were Funkwhale static files should be stored |
+| `funkwhale_systemd_managed`             | `true`                        | If `true`, will configure Funkwhale systemd services   |
 | `funkwhale_systemd_after`               | `redis.service postgresql.service` | Configuration used for Systemd `After=` directive. Modify it if you have a database or redis server on a separate host   |
 | `funkwhale_systemd_service_name`        | `funkwhale`                   | Name of the generated Systemd service, e.g when calling `systemctl start <xxx>` |
 | `funkwhale_username`                    | `funkwhale`                   | Username of the system user and owner of Funkwhale data, files and configuration |

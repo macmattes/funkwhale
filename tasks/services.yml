@@ -2,6 +2,7 @@
 
 - name: "Create {{ funkwhale_systemd_service_name }}-* systemd file"
   become: true
+  when: funkwhale_systemd_managed
   template:
     src: "funkwhale-process.service.j2"
     dest: "/etc/systemd/system/{{ funkwhale_systemd_service_name }}-{{ item.name }}.service"
@@ -21,6 +22,7 @@
 
 - name: "Create {{ funkwhale_systemd_service_name }} systemd target file"
   become: true
+  when: funkwhale_systemd_managed
   template:
     src: "{{ funkwhale_systemd_service_name }}.target.j2"
     dest: "/etc/systemd/system/{{ funkwhale_systemd_service_name }}.target"
@@ -30,6 +32,7 @@
 
 - name: "Start and enable {{ funkwhale_systemd_service_name }}-* services"
   become: true
+  when: funkwhale_systemd_managed
   systemd:
     name: "{{ item }}"
     enabled: true

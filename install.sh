@@ -7,7 +7,6 @@ set -eu
 # If Ansible step fails with ascii decore error, ensure you have a locale properly set on
 # your system e.g apt-get install -y locales locales-all
 export LANG="en_US.UTF-8"
-
 funkwhale_version="${FUNKWHALE_VERSION-funkwhale_version_placeholder}"
 funkwhale_hostname="${FUNKWHALE_DOMAIN-}"
 funkwhale_admin_email="${FUNKWHALE_ADMIN_EMAIL-}"
@@ -23,6 +22,7 @@ base_path="/srv/funkwhale"
 ansible_conf_path="$base_path/ansible"
 ansible_bin_path="$HOME/.local/bin"
 ansible_funkwhale_role_version="${ANSIBLE_FUNKWHALE_ROLE_VERSION-master}"
+ansible_funkwhale_role_path="${ANSIBLE_FUNKWHALE_ROLE_PATH-}"
 funkwhale_systemd_after=""
 total_steps="4"
 
@@ -89,12 +89,14 @@ setup() {
             read -p "Enter your redis configuration, (e.g redis://127.0.0.1:6379/0): "  funkwhale_redis_url
             funkwhale_systemd_after="funkwhale_systemd_after: "
         fi
+        yesno_prompt funkwhale_systemd_managed 'Install and manage systemd services files?' 'yes'
         yesno_prompt funkwhale_disable_django_admin 'Disable access to API admin dashboard?' 'no'
     else
         funkwhale_nginx_managed="true"
         funkwhale_database_managed="true"
         funkwhale_redis_managed="true"
         funkwhale_disable_django_admin="false"
+        funkwhale_systemd_managed="true"
     fi
 
 
@@ -107,6 +109,7 @@ setup() {
     echo "- Admin email: $funkwhale_admin_email"
     echo "- Manage nginx and certbot: $funkwhale_nginx_managed"
     echo "- Manage redis: $funkwhale_redis_managed"
+    echo "- Manage systemd unit files: $funkwhale_systemd_managed"
     if [ "$funkwhale_redis_managed" = "false" ]; then
         echo "  - Custom redis configuration: $funkwhale_redis_url"
     fi
@@ -220,17 +223,25 @@ init_ansible() {
     echo "[2/$total_steps] Creating ansible configuration files in $ansible_conf_path..."
     mkdir -p "$ansible_conf_path"
     cd "$ansible_conf_path"
-    cat <<EOF >requirements.yml
-- src: git+https://dev.funkwhale.audio/funkwhale/ansible
-  name: funkwhale
-  version: $ansible_funkwhale_role_version
-EOF
     cat <<EOF >ansible.cfg
 [defaults]
 # Needed to use become with unprevileged users,
 # see https://docs.ansible.com/ansible/latest/user_guide/become.html#becoming-an-unprivileged-user
 #allow_world_readable_tmpfiles=true
 EOF
+    if [ "$ansible_funkwhale_role_path" = '' ]; then
+    cat <<EOF >requirements.yml
+- src: git+https://dev.funkwhale.audio/funkwhale/ansible
+  name: funkwhale
+  version: $ansible_funkwhale_role_version
+EOF
+    else
+        mkdir -p "$ansible_conf_path/roles"
+        echo "roles_path = $ansible_conf_path/roles" >> ansible.cfg
+        echo "Symlinking local version of the ansible role: $ansible_funkwhale_role_path to $ansible_conf_path/roles/funkwhale"
+        rm -f "$ansible_conf_path/roles/funkwhale"
+        ln -s "$ansible_funkwhale_role_path" "$ansible_conf_path/roles/funkwhale"
+    fi
     cat <<EOF >playbook.yml
 - hosts: funkwhale_servers
   roles:
@@ -238,17 +249,34 @@ EOF
       funkwhale_hostname: $funkwhale_hostname
       funkwhale_version: $funkwhale_version
       funkwhale_letsencrypt_email: $funkwhale_admin_email
-      funkwhale_nginx_managed: $funkwhale_nginx_managed
-      funkwhale_redis_managed: $funkwhale_redis_managed
-      funkwhale_redis_url: $funkwhale_redis_url
-      funkwhale_database_managed: $funkwhale_database_managed
-      funkwhale_database_url: $funkwhale_database_url
       # Add any environment variables to the generated .env by uncommenting and editing the lines below
       # then execute ./reconfigure
       # funkwhale_env_vars:
       #   - "EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587"
       #   - "MYCUSTOM_ENV_VAR=test"
 EOF
+    if [ "$funkwhale_nginx_managed" = "false" ]; then
+      cat <<EOF >>playbook.yml
+      funkwhale_nginx_managed: false
+EOF
+    fi
+    if [ "$funkwhale_database_managed" = "false" ]; then
+      cat <<EOF >>playbook.yml
+      funkwhale_database_managed: false
+      funkwhale_database_url: $funkwhale_database_url
+EOF
+    fi
+    if [ "$funkwhale_redis_managed" = "false" ]; then
+      cat <<EOF >>playbook.yml
+      funkwhale_redis_managed: false
+      funkwhale_redis_url: $funkwhale_redis_url
+EOF
+    fi
+    if [ "$funkwhale_systemd_managed" = "false" ]; then
+      cat <<EOF >>playbook.yml
+      funkwhale_systemd_managed: false
+EOF
+    fi
     cat <<EOF >reconfigure
 #!/bin/sh
 # reapply playbook with existing parameter
@@ -270,14 +298,12 @@ EOF
 [funkwhale_servers]
 127.0.0.1 ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 EOF
-    if [ "$funkwhale_disable_django_admin" = "true" ]; then
-        cat <<EOF >>playbook.yml
-      funkwhale_disable_django_admin: true
-EOF
+    if [ "$ansible_funkwhale_role_path" = '' ]; then
+        echo "[2/$total_steps] Downloading Funkwhale playbook dependencies"
+        $ansible_bin_path/ansible-galaxy install -r requirements.yml -f
+    else
+        echo "[2/$total_steps] Skipping playbook dependencies, using local role instead"
     fi
-    echo "[2/$total_steps] Downloading Funkwhale playbook dependencies"
-    $ansible_bin_path/ansible-galaxy install -r requirements.yml -f
-
 }
 run_playbook() {
     cd "$ansible_conf_path"

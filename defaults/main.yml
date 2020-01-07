@@ -21,6 +21,7 @@ funkwhale_web_workers: 1
 funkwhale_protocol: https
 funkwhale_settings_module: config.settings.production
 funkwhale_env_vars: []
+funkwhale_systemd_managed: true
 funkwhale_systemd_after: redis.service postgresql.service
 funkwhale_systemd_service_name: funkwhale
 funkwhale_letsencrypt_certbot_flags:
