@@ -145,6 +145,18 @@ Role Variables
 | `funkwhale_custom_pip_packages`         | `[]`                          | A list of additional python packages to download |
 | `funkwhale_custom_settings`             | ``                            | Some Python code to append to `api/config/settings/production.py`. Use funkwhale_custom_settings: |` for multiline code. |
 
+**Installing from source**
+
+If you want to install Funkwhale from source (e.g to try a nonproduction branch, or use your own fork), you use the
+following variables:
+
+| name                                    | Default                                               | Description                                   |
+| --------------------------------------- | ----------------------------------------------------- | --------------------------------------------- |
+| `funkwhale_install_from_source`         | `false`                                               | Install and build Funkwhale from source       |
+| `funkwhale_source_url`                  | `https://dev.funkwhale.audio/funkwhale/funkwhale.git` | URL to the git repository to use              |
+
+Use the `funkwhale_version` variable to control the git tag/branch to checkout.
+
 Supported platforms
 -------------------
 

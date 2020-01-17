@@ -67,10 +67,11 @@
   notify:
     - restart funkwhale
 
+
 - name: Download front-end files
   become: true
   become_user: "{{ funkwhale_username }}"
-  when: funkwhale_frontend_managed
+  when: funkwhale_frontend_managed and not funkwhale_install_from_source
   unarchive:
     src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_version }}/download?job=build_front
     dest: "{{ funkwhale_install_path }}"
@@ -81,12 +82,112 @@
 - name: Download api files
   become: true
   become_user: "{{ funkwhale_username }}"
+  when: not funkwhale_install_from_source
   unarchive:
     src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_version }}/download?job=build_api
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
     - reload funkwhale
+
+# Install from source
+- name: "Download Funkwhale source"
+  when: funkwhale_install_from_source
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  git:
+    repo: "{{ funkwhale_source_url }}"
+    dest: "{{ funkwhale_install_path }}/src"
+    version: "{{ funkwhale_version }}"
+    force: true
+  notify:
+    - reload funkwhale
+
+- name: Create /front symlink to source
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  file:
+    src: "{{ funkwhale_install_path }}/src/front"
+    dest: "{{ funkwhale_install_path }}/front"
+    state: link
+
+- name: Create /api symlink to source
+  when: funkwhale_install_from_source
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  file:
+    src: "{{ funkwhale_install_path }}/src/api"
+    dest: "{{ funkwhale_install_path }}/api"
+    state: link
+
+- name: Create /config symlink in source
+  when: funkwhale_install_from_source
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  file:
+    src: "{{ funkwhale_config_path }}"
+    dest: "{{ funkwhale_install_path }}/src/config"
+    state: link
+
+- name: "Add frontend apt repositories GPG key"
+  become: true
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  with_items:
+    - https://dl.yarnpkg.com/debian/pubkey.gpg
+    - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: "Install frontend apt repositories"
+  become: true
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian/ stable main
+    state: present
+  with_items:
+    - "deb https://dl.yarnpkg.com/debian/ stable main"
+    - "deb https://deb.nodesource.com/node_{{ funkwhale_node_version }}.x {{ ansible_distribution_release }} main"
+
+- name: "Install frontend build dependencies"
+  become: true
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  package:
+    name: "{{ item }}"
+  with_items:
+    - nodejs
+    - yarn
+    - yarn
+
+- name: "Install frontend depencies"
+  become: true
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  package:
+    name:
+      - nodejs
+      - yarn
+      - gettext
+      - jq
+
+- name: "Install frontend javascript dependencies"
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  yarn:
+    path: "{{ funkwhale_install_path }}/src/front"
+
+- name: "Build front-end"
+  become: true
+  become_user: "{{ funkwhale_username }}"
+  when: funkwhale_frontend_managed and funkwhale_install_from_source
+  command: "yarn build"
+  args:
+    chdir: "{{ funkwhale_install_path }}/src/front"
+  notify:
+    - reload funkwhale
+
+# end of from source related stuff
 
 - name: "Setup virtualenv"
   become: true
