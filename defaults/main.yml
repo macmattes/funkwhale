@@ -31,3 +31,6 @@ funkwhale_ssl_cert_path:
 funkwhale_ssl_key_path:
 funkwhale_custom_settings:
 funkwhale_custom_pip_packages: []
+funkwhale_install_from_source: false
+funkwhale_source_url: https://dev.funkwhale.audio/funkwhale/funkwhale.git
+funkwhale_node_version: "13"
