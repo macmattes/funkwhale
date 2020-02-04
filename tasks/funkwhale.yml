@@ -1,5 +1,11 @@
 ---
 
+- name: Ensure home folder can be created
+  become: true
+  file:
+    path: "{{ funkwhale_install_path | dirname }}"
+    state: directory
+
 - name: "Create funkwhale user"
   become: true
   user:
