@@ -1,47 +1,60 @@
 ---
 - name: "Install postgresql"
   become: true
-  when: funkwhale_database_managed
+  when: funkwhale_database_managed and funkwhale_database_local
   package:
     name:
       - postgresql
       - python3-psycopg2
 
 - name: "Start Postgresql"
-  when: funkwhale_database_managed
+  when: funkwhale_database_managed and funkwhale_database_local
   service:
     name: postgresql
     state: started
 
-- name: "Create {{ funkwhale_database_name }} database"
+- name: "Create {{ funkwhale_database_user }} database user on {{ funkwhale_database_host_ansible }} (local / passwordless)"
+  become: true
+  become_user: postgres
+  when: funkwhale_database_managed and funkwhale_database_host_ansible == 'localhost'
+  postgresql_user:
+    name: "{{ funkwhale_database_user }}"
+    login_user: postgres
+  delegate_to: "{{ funkwhale_database_host_ansible }}"
+
+- name: "Create {{ funkwhale_database_user }} database user on {{ funkwhale_database_host_ansible }} (remote / with password)"
+  become: true
+  become_user: postgres
+  when: funkwhale_database_managed and funkwhale_database_host_ansible != 'localhost'
+  postgresql_user:
+    name: "{{ funkwhale_database_user }}"
+    password: "{{ funkwhale_database_password }}"
+    login_user: postgres
+  delegate_to: "{{ funkwhale_database_host_ansible }}"
+
+- name: "Create {{ funkwhale_database_name }} database on {{ funkwhale_database_host_ansible }}"
   become: true
   become_user: postgres
   when: funkwhale_database_managed
   postgresql_db:
     name: "{{ funkwhale_database_name }}"
+    login_user: postgres
+    owner: "{{ funkwhale_database_user }}"
     encoding: UTF-8
     template: template0
+  delegate_to: "{{ funkwhale_database_host_ansible }}"
 
-- name: "Create {{ funkwhale_database_user }} database user"
-  become: true
+- name: set up pgsql extensions
+  become: yes
   become_user: postgres
   when: funkwhale_database_managed
-  postgresql_user:
+  postgresql_ext:
     db: "{{ funkwhale_database_name }}"
-    name: "{{ funkwhale_database_user }}"
+    name: "{{ myext }}"
+    login_user: postgres
+  loop: ['unaccent', 'citext']
+  loop_control:
+    loop_var: myext
+  delegate_to: "{{ funkwhale_database_host_ansible }}"
 
-- name: "Grant privileges on database {{ funkwhale_database_name }} to {{ funkwhale_database_user }} user"
-  when: funkwhale_database_managed
-  become: true
-  become_user: postgres
-  command: psql -c "GRANT ALL PRIVILEGES ON DATABASE {{ funkwhale_database_name }} TO {{ funkwhale_database_user }}"
-
-
-- name: "Create db extensions"
-  when: funkwhale_database_managed
-  become: true
-  become_user: postgres
-  command: psql {{ funkwhale_database_name }} -c "CREATE EXTENSION IF NOT EXISTS {{ item }}"
-  with_items:
-    - unaccent
-    - citext
+...
