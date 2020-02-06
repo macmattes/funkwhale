@@ -26,20 +26,27 @@ funkwhale_database_port: 5432
 #funkwhale_database_url: postgresql://{{ funkwhale_database_user }}[:{{ funkwhale_database_password }}]@[{{ funkwhale_database_host_app }}]:{{ funkwhale_database_port | default(5432) }}/{{ funkwhale_database_name }}
 
 funkwhale_nginx_managed: true
+# If you have an hTTPS reverse proxy higher up, set this to true
+funkwhale_nginx_tls_termination: true
 funkwhale_nginx_max_body_size: 100M
+funkwhale_nginx_use_compression: true
+funkwhale_ssl_cert_path:
+funkwhale_ssl_key_path:
+funkwhale_protocol: https
+
+funkwhale_letsencrypt_certbot_flags:
+funkwhale_letsencrypt_enabled: true
+funkwhale_letsencrypt_skip_cert: false
+
 funkwhale_redis_managed: true
 funkwhale_api_ip: 127.0.0.1
 funkwhale_api_port: 5000
 funkwhale_web_workers: 1
-funkwhale_protocol: https
 funkwhale_settings_module: config.settings.production
 funkwhale_env_vars: []
 funkwhale_systemd_managed: true
 funkwhale_systemd_after: redis.service postgresql.service
 funkwhale_systemd_service_name: funkwhale
-funkwhale_letsencrypt_certbot_flags:
-funkwhale_letsencrypt_enabled: true
-funkwhale_letsencrypt_skip_cert: false
 funkwhale_ssl_cert_path:
 funkwhale_ssl_key_path:
 funkwhale_custom_settings:
