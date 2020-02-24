@@ -96,7 +96,7 @@ ansible-playbook --ask-become-pass -i inventory.ini playbook.yml --check --diff
 ```
 *On some hosts, you may need to install the `python-apt` package for check mode to work*.
 
-This command will show you the changes that would be applied to your system. If you are confortable with them,
+This command will show you the changes that would be applied to your system. If you are comfortable with them,
 rerun the same command without the `--check` flag.
 
 Once installation is complete, run `/srv/funkwhale/virtualenv/bin/python /srv/funkwhale/api/manage.py createsuperuser` to create your admin account.
@@ -117,19 +117,19 @@ Role Variables
 
 | name                                    | Default                       | Description                                   |
 | --------------------------------------- | ----------------------------- | --------------------------------------------- |
-| `funkwhale_api_ip`                      | `127.0.0.1`                   | IP adress to bind the Funkwhale server to |
-| `funkwhale_api_port`                    | `5000`                        | Port to bind the Funkwhale server to |
+| `funkwhale_api_ip`                      | `127.0.0.1`                   | IP address with which to bind the Funkwhale server |
+| `funkwhale_api_port`                    | `5000`                        | Port with which to bind the Funkwhale server |
 | `funkwhale_config_path`                 | `/srv/funkwhale/config`       | Path to Funkwhale's configuration directory |
 | `funkwhale_database_managed`            | `true`                        | If `true`, the role will manage the database server and Funkwhale's database  |
 | `funkwhale_database_name`               | `funkwhale`                   | Name of the Funkwhale database to use |
 | `funkwhale_database_user`               | `funkwhale`                   | Postgresql username to login as |
 | `funkwhale_env_vars`                    | `[]`                          | List of environment variables to append to the generated `.env` file. Example: `["AWS_ACCESS_KEY_ID=myawsid", "AWS_SECRET_ACCESS_KEY=myawskey"]` |
-| `funkwhale_external_storage_enabled`    | `false`                       | If `true`, set up the proper configuration to use an extenal storage for media files |
+| `funkwhale_external_storage_enabled`    | `false`                       | If `true`, set up the proper configuration to use an external storage for media files |
 | `funkwhale_disable_django_admin`        | `false`                       | If `true`, returns a 403 (Forbidden) for `/api/admin` |
-| `funkwhale_install_path`                | `/srv/funkwhale`              | Path were frontend, api and virtualenv files should be stored (**no trailing slash**) |
+| `funkwhale_install_path`                | `/srv/funkwhale`              | Path where frontend, api and virtualenv files should be stored (**no trailing slash**) |
 | `funkwhale_letsencrypt_certbot_flags`   | `null`                        | Additional flags to pass to `certbot` |
 | `funkwhale_letsencrypt_enabled`         | `true`                        | If `true`, will configure SSL with certbot and Let's Encrypt |
-| `funkwhale_media_path`                  | `/srv/funkwhale/data/media`   | Path were audio and uploaded files should be stored (**no trailing slash**)  |
+| `funkwhale_media_path`                  | `/srv/funkwhale/data/media`   | Path where audio and uploaded files should be stored (**no trailing slash**)  |
 | `funkwhale_music_path`                  | `/srv/funkwhale/data/music`   | Path to your existing music library, to use with [CLI import](https://docs.funkwhale.audio/admin/importing-music.html) (**no trailing slash**) |
 | `funkwhale_nginx_managed`               | `true`                        | If `true`, will install and configure nginx |
 | `funkwhale_nginx_max_body_size`         | `100M`                        | Value of nginx's `max_body_size` parameter to use |
@@ -137,7 +137,7 @@ Role Variables
 | `funkwhale_redis_managed`               | `true`                        | If `true`, will install and configure redis |
 | `funkwhale_ssl_cert_path`               | ``                            | Path to an existing SSL certificate to use (use in combination with `funkwhale_letsencrypt_enabled: false`) |
 | `funkwhale_ssl_key_path`                | ``                            | Path to an existing SSL key to use (use in combination with `funkwhale_letsencrypt_enabled: false`) |
-| `funkwhale_static_path`                 | `/srv/funkwhale/data/static`  | Path were Funkwhale static files should be stored |
+| `funkwhale_static_path`                 | `/srv/funkwhale/data/static`  | Path where Funkwhale static files should be stored |
 | `funkwhale_systemd_managed`             | `true`                        | If `true`, will configure Funkwhale systemd services   |
 | `funkwhale_systemd_after`               | `redis.service postgresql.service` | Configuration used for Systemd `After=` directive. Modify it if you have a database or redis server on a separate host   |
 | `funkwhale_systemd_service_name`        | `funkwhale`                   | Name of the generated Systemd service, e.g when calling `systemctl start <xxx>` |
