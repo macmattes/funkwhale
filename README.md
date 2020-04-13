@@ -161,7 +161,7 @@ Supported platforms
 -------------------
 
 - Debian 9
-- More to come
+- Ubuntu 18
 
 Dependencies
 ------------

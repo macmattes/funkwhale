@@ -24,3 +24,11 @@
       - libffi-dev
       # not strictly needed but useful
       - "curl"
+
+- name: "Install Ubuntu-specific dependencies"
+  when: ansible_distribution == 'Ubuntu'
+  become: true
+  package:
+    name:
+      # needed for redis to start
+      - "policykit-1"
