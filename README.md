@@ -31,7 +31,7 @@ Installation and usage
 Install ansible:
 
 ```
-pip install --user ansible
+pip3 install --user ansible
 ```
 
 Create a directory for ansible files:
