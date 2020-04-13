@@ -40,7 +40,7 @@
   cron:
     name: funkwhale_letsencrypt_renewal
     special_time: weekly
-    job: certbot-auto -v -n --renew certonly --nginx -m {{ funkwhale_letsencrypt_email }} --agree-tos -d {{ funkwhale_hostname }} {{ funkwhale_letsencrypt_certbot_flags }}
+    job: /usr/local/bin/certbot-auto -v -n --renew certonly --nginx -m {{ funkwhale_letsencrypt_email }} --agree-tos -d {{ funkwhale_hostname }} {{ funkwhale_letsencrypt_certbot_flags }}
 
 - name: "Create funkwhale proxy file"
   when: funkwhale_nginx_managed
