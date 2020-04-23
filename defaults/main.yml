@@ -48,8 +48,6 @@ funkwhale_env_vars: []
 funkwhale_systemd_managed: true
 funkwhale_systemd_after: redis.service postgresql.service
 funkwhale_systemd_service_name: funkwhale
-funkwhale_ssl_cert_path:
-funkwhale_ssl_key_path:
 funkwhale_custom_settings:
 funkwhale_custom_pip_packages: []
 funkwhale_install_from_source: false
