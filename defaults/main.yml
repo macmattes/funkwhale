@@ -38,6 +38,7 @@ funkwhale_letsencrypt_certbot_flags:
 funkwhale_letsencrypt_enabled: true
 funkwhale_letsencrypt_skip_cert: false
 
+funkwhale_nginx_csp_policy: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:"
 funkwhale_redis_managed: true
 funkwhale_api_ip: 127.0.0.1
 funkwhale_api_port: 5000

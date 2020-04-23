@@ -120,6 +120,7 @@ Role Variables
 | `funkwhale_api_ip`                      | `127.0.0.1`                   | IP address with which to bind the Funkwhale server |
 | `funkwhale_api_port`                    | `5000`                        | Port with which to bind the Funkwhale server |
 | `funkwhale_config_path`                 | `/srv/funkwhale/config`       | Path to Funkwhale's configuration directory |
+| `funkwhale_nginx_csp_policy`            | `"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:"`       | Content-Security-Policy header to us. You will need to tweak this if you're serving media files from a separate domain. |
 | `funkwhale_database_managed`            | `true`                        | If `true`, the role will manage the database server and Funkwhale's database  |
 | `funkwhale_database_name`               | `funkwhale`                   | Name of the Funkwhale database to use |
 | `funkwhale_database_user`               | `funkwhale`                   | Postgresql username to login as |

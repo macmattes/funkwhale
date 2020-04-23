@@ -30,7 +30,12 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
     add_header Strict-Transport-Security "max-age=63072000; preload";
-    {% endif %}
+    {% endif -%}
+
+    {% if funkwhale_nginx_csp_policy -%}
+    # Security-related headers
+    add_header Content-Security-Policy "{{ funkwhale_nginx_csp_policy }}";
+    {% endif -%}
 
     root {{ funkwhale_frontend_path }};
 
