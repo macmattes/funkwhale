@@ -239,6 +239,7 @@
 - name: Append custom settings to production.py, if any
   become: true
   become_user: "{{ funkwhale_username }}"
+  when: "funkwhale_custom_settings"
   blockinfile:
     path: "{{ funkwhale_install_path }}/api/config/settings/production.py"
     insertafter: "EOF"
