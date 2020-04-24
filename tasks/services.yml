@@ -13,7 +13,7 @@
       command: "{{ funkwhale_install_path }}/virtualenv/bin/celery -A funkwhale_api.taskapp worker -l INFO"
     - name: server
       description: Funkwhale application server
-      command: "{{ funkwhale_install_path }}/virtualenv/bin/gunicorn config.asgi:application -w ${FUNKWHALE_WEB_WORKERS} -k uvicorn.workers.UvicornWorker -b ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}"
+      command: "{{ funkwhale_install_path }}/virtualenv/bin/gunicorn config.asgi:application -w ${FUNKWHALE_WEB_WORKERS} -k uvicorn.workers.UvicornWorker -b ${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT} {{ funkwhale_gunicorn_extra_args }}"
     - name: beat
       description: Funkwhale celery beat process
       command: "{{ funkwhale_install_path }}/virtualenv/bin/celery -A funkwhale_api.taskapp beat -l INFO"

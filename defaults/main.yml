@@ -43,6 +43,7 @@ funkwhale_redis_managed: true
 funkwhale_api_ip: 127.0.0.1
 funkwhale_api_port: 5000
 funkwhale_web_workers: 1
+funkwhale_gunicorn_extra_args: ""
 funkwhale_settings_module: config.settings.production
 funkwhale_env_vars: []
 funkwhale_systemd_managed: true
