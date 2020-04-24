@@ -14,8 +14,8 @@ funkwhale_database_managed: true
 funkwhale_database_local: true
 funkwhale_database_name: funkwhale
 funkwhale_database_user: funkwhale
-# the DB host as per your ansible inventory
-funkwhale_database_host_ansible: localhost
+# the DB host as per your ansible inventory. No delegation is used if left empty
+funkwhale_database_host_ansible:
 # the DB FQDN or IP for funkwhale connector configuration (ex: pg01.local)
 funkwhale_database_host_app: localhost
 funkwhale_database_port: 5432
