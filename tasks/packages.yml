@@ -23,3 +23,5 @@
       - libffi-dev
       # not strictly needed but useful
       - "curl"
+      - "dbus"
+      - "virtualenv"

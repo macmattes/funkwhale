@@ -156,16 +156,6 @@
     - "deb https://dl.yarnpkg.com/debian/ stable main"
     - "deb https://deb.nodesource.com/node_{{ funkwhale_node_version }}.x {{ ansible_distribution_release }} main"
 
-- name: "Install frontend build dependencies"
-  become: true
-  when: funkwhale_frontend_managed and funkwhale_install_from_source
-  package:
-    name: "{{ item }}"
-  with_items:
-    - nodejs
-    - yarn
-    - yarn
-
 - name: "Install frontend depencies"
   become: true
   when: funkwhale_frontend_managed and funkwhale_install_from_source
