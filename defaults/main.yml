@@ -26,8 +26,9 @@ funkwhale_database_port: 5432
 #funkwhale_database_url: postgresql://{{ funkwhale_database_user }}[:{{ funkwhale_database_password }}]@[{{ funkwhale_database_host_app }}]:{{ funkwhale_database_port | default(5432) }}/{{ funkwhale_database_name }}
 
 funkwhale_nginx_managed: true
-# If you have an hTTPS reverse proxy higher up, set this to true
+# If you have an HTTPS reverse proxy higher up, set this to true
 funkwhale_nginx_tls_termination: true
+funkwhale_nginx_tls_configure_ciphers: true
 funkwhale_nginx_max_body_size: 100M
 funkwhale_nginx_use_compression: true
 funkwhale_ssl_cert_path:
