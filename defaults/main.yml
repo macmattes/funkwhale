@@ -31,6 +31,7 @@ funkwhale_nginx_tls_termination: true
 funkwhale_nginx_tls_configure_ciphers: true
 funkwhale_nginx_max_body_size: 100M
 funkwhale_nginx_use_compression: true
+funkwhale_nginx_additional_config:
 funkwhale_ssl_cert_path:
 funkwhale_ssl_key_path:
 funkwhale_protocol: https

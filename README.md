@@ -133,6 +133,7 @@ Role Variables
 | `funkwhale_letsencrypt_enabled`         | `true`                        | If `true`, will configure SSL with certbot and Let's Encrypt |
 | `funkwhale_media_path`                  | `/srv/funkwhale/data/media`   | Path where audio and uploaded files should be stored (**no trailing slash**)  |
 | `funkwhale_music_path`                  | `/srv/funkwhale/data/music`   | Path to your existing music library, to use with [CLI import](https://docs.funkwhale.audio/admin/importing-music.html) (**no trailing slash**) |
+| `funkwhale_nginx_additional_config`     | `""`                          | Additional nginx configuration to add to the Funkwhale `server{}` block |
 | `funkwhale_nginx_managed`               | `true`                        | If `true`, will install and configure nginx |
 | `funkwhale_nginx_tls_configure_ciphers` | `true`                        | Set TLS ciphers, curves, etc, overriding any settings in http{} |
 | `funkwhale_nginx_max_body_size`         | `100M`                        | Value of nginx's `max_body_size` parameter to use |
