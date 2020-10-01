@@ -20,6 +20,7 @@ server {
     ssl_certificate /etc/letsencrypt/live/{{ funkwhale_hostname }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ funkwhale_hostname }}/privkey.pem;
     {% endif -%}
+    {% if funkwhale_nginx_tls_configure_ciphers -%}
     # from https://cipherli.st/
     ssl_prefer_server_ciphers on;
     ssl_ciphers EECDH+AESGCM:EDH+AESGCM;
@@ -29,6 +30,7 @@ server {
     ssl_session_tickets off;
     ssl_stapling on;
     ssl_stapling_verify on;
+    {% endif -%}
     add_header Strict-Transport-Security "max-age=63072000; preload";
     {% endif -%}
 
@@ -67,9 +69,9 @@ server {
         text/x-cross-domain-policy;
     {% else -%}
     gzip off;
-    {% endif %}
-
+    {% endif -%}
     # end of compression settings
+
     location / {
         include /etc/nginx/funkwhale_proxy.conf;
         # this is needed if you have file import via upload enabled
