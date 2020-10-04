@@ -220,7 +220,7 @@
   pip:
     name:
       - gunicorn
-      - uvicorn
+      - uvicorn[standard]
     virtualenv: "{{ funkwhale_install_path }}/virtualenv"
     virtualenv_python: python3
   notify:
