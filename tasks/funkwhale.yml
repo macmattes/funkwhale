@@ -1,5 +1,16 @@
 ---
 
+- name: Check latest version
+  when: funkwhale_version is not defined or funkwhale_version == "latest"
+  uri:
+    url: https://docs.funkwhale.audio/latest.txt
+    return_content: yes
+  register: latest_version
+
+- name: Set version to install
+  set_fact:
+    funkwhale_install_version: "{{ latest_version.get('content', funkwhale_version) | trim }}"
+
 - name: Ensure home folder can be created
   become: true
   file:
@@ -82,7 +93,7 @@
   become_user: "{{ funkwhale_username }}"
   when: funkwhale_frontend_managed and not funkwhale_install_from_source
   unarchive:
-    src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_version }}/download?job=build_front
+    src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_install_version }}/download?job=build_front
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
@@ -93,7 +104,7 @@
   become_user: "{{ funkwhale_username }}"
   when: not funkwhale_install_from_source
   unarchive:
-    src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_version }}/download?job=build_api
+    src: https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/{{ funkwhale_install_version }}/download?job=build_api
     dest: "{{ funkwhale_install_path }}"
     remote_src: true
   notify:
@@ -107,7 +118,7 @@
   git:
     repo: "{{ funkwhale_source_url }}"
     dest: "{{ funkwhale_install_path }}/src"
-    version: "{{ funkwhale_version }}"
+    version: "{{ funkwhale_install_version }}"
     force: true
   notify:
     - reload funkwhale

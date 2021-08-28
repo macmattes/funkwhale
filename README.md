@@ -76,7 +76,6 @@ Add the following to `playbook.yml`:
   roles:
     - role: funkwhale
       funkwhale_hostname: yourdomain.funkwhale
-      funkwhale_version: 0.18.3
       funkwhale_letsencrypt_email: contact@youremail.com
 ```
 
@@ -109,7 +108,6 @@ Role Variables
 | name                          | Example                       | Description                                   |
 | ----------------------------- | ----------------------------- | --------------------------------------------- |
 | `funkwhale_hostname`          | `yourdomain.funkwhale`        | The domain name of your Funkwhale pod         |
-| `funkwhale_version`           | `0.18.3`                      | The version to install/upgrade to. You can also use `develop` to run the development branch         |
 | `funkwhale_letsencrypt_email` | `contact@youremail.com`       | The email to associate with your Let's Encrypt certificate (not needed if you set `funkwhale_letsencrypt_enabled: false`, see below) |
 
 **Optional variables**
@@ -146,6 +144,7 @@ Role Variables
 | `funkwhale_systemd_after`               | `redis.service postgresql.service` | Configuration used for Systemd `After=` directive. Modify it if you have a database or redis server on a separate host   |
 | `funkwhale_systemd_service_name`        | `funkwhale`                   | Name of the generated Systemd service, e.g when calling `systemctl start <xxx>` |
 | `funkwhale_username`                    | `funkwhale`                   | Username of the system user and owner of Funkwhale data, files and configuration |
+| `funkwhale_version`                     | `latest`                      | The version to install/upgrade to. You can also use `develop` to run the development branch |
 | `funkwhale_custom_pip_packages`         | `[]`                          | A list of additional python packages to download |
 | `funkwhale_custom_settings`             | ``                            | Some Python code to append to `api/config/settings/production.py`. Use funkwhale_custom_settings: |` for multiline code. |
 
