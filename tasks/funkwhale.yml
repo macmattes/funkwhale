@@ -18,7 +18,9 @@
   file:
     path: "{{ item }}"
     owner: "{{ funkwhale_username }}"
+    group: "{{ funkwhale_username }}"
     state: directory
+    mode: '755'
   with_items:
     - "{{ funkwhale_install_path }}"
     - "{{ funkwhale_media_path }}"
@@ -26,25 +28,26 @@
     - "{{ funkwhale_music_path }}"
     - "{{ funkwhale_config_path }}"
 
-- name: Check if django_secret_key file is setup
+- name: Check if django_secret_key file is set up
   stat:
     path: "{{ funkwhale_config_path }}/django_secret_key"
   register: "result_django_secret_key"
 
 - name: "Generate a random secret key"
-  when: result_django_secret_key.stat.exists == False
+  when: not result_django_secret_key.stat.exists
   become: true
   become_user: "{{ funkwhale_username }}"
   command: "openssl rand -hex 25"
   register: result_secret_key_generation
 
 - name: "Create django_secret_key file"
-  when: not ansible_check_mode and result_django_secret_key.stat.exists == False
+  when: not ansible_check_mode and not result_django_secret_key.stat.exists
   become: true
   become_user: "{{ funkwhale_username }}"
   copy:
     content: "{{ result_secret_key_generation.stdout }}"
     dest: "{{ funkwhale_config_path }}/django_secret_key"
+    mode: '600'
 
 - name: "Setup a dummy secret key"
   when: ansible_check_mode

@@ -31,7 +31,7 @@
     login_user: postgres
   delegate_to: "{{ funkwhale_database_host_ansible or inventory_hostname }}"
 
-- name: "Create {{ funkwhale_database_name }} database on {{ funkwhale_database_host_ansible or inventory_hostname}}"
+- name: "Create {{ funkwhale_database_name }} database on {{ funkwhale_database_host_ansible or inventory_hostname }}"
   become: true
   become_user: postgres
   when: funkwhale_database_managed

@@ -216,9 +216,9 @@ do_install() {
 
 init_ansible() {
     echo "[2/$total_steps] Installing ansible dependencies..."
-    install_packages  curl git python3-pip python3-apt sudo locales locales-all
+    install_packages  curl git python3-pip python3-apt python3-psycopg2 sudo locales locales-all
     echo "[2/$total_steps] Installing Ansible..."
-    pip3 install --user ansible=="$ansible_version" psycopg2-binary
+    pip3 install --user ansible=="$ansible_version"
 
     echo "[2/$total_steps] Creating ansible configuration files in $ansible_conf_path..."
     mkdir -p "$ansible_conf_path"

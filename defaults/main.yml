@@ -23,7 +23,7 @@ funkwhale_database_port: 5432
 # ↓ Only needed if 'funkwhale_database_managed' == false
 # ↓ This is also assuming DB and user have already been set up, outside of the playbook.
 # ↓ Considering the playbook handles both local and remote PostGreSQL server types, this should typically not be required.
-#funkwhale_database_url: postgresql://{{ funkwhale_database_user }}[:{{ funkwhale_database_password }}]@[{{ funkwhale_database_host_app }}]:{{ funkwhale_database_port | default(5432) }}/{{ funkwhale_database_name }}
+# funkwhale_database_url: postgresql://{{ funkwhale_database_user }}[:{{ funkwhale_database_password }}]@[{{ funkwhale_database_host_app }}]:{{ funkwhale_database_port | default(5432) }}/{{ funkwhale_database_name }}
 
 funkwhale_nginx_managed: true
 # If you have an HTTPS reverse proxy higher up, set this to true
