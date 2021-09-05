@@ -3,11 +3,13 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: |
+  yamllint .
+  ansible-lint
+  #flake8
 platforms:
-  - name: debian-stretch
-    image: alehaa/debian-systemd:stretch
+  - name: debian-buster
+    image: alehaa/debian-systemd:buster
     command: /sbin/init
     tmpfs:
       - /run
@@ -17,11 +19,10 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  inventory:
+    host_vars:
+      debian-buster:
+        ansible_python_interpreter: "/usr/bin/python3"
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8
-    enabled: False
