@@ -74,7 +74,7 @@
 - name: "Register secret key"
   when: not ansible_check_mode
   set_fact:
-    django_secret_key: "{{ secret_key['content'] | b64decode }}"
+    django_secret_key: "{{ secret_key['content'] }}"
 
 - name: "Create funkwhale configuration file"
   become: true
