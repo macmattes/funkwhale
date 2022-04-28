@@ -25,3 +25,7 @@
       #- "curl"
       #- "dbus"
       #- "virtualenv"
+      - "libxslt-1.1.35_2"
+      - "rust-1.59.0"
+      - "py38-libxml2-2.9.13_4"
+      - "py38-psycopg2-2.9.3"
