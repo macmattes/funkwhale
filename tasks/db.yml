@@ -4,8 +4,10 @@
   when: funkwhale_database_managed and funkwhale_database_local
   package:
     name:
-      #- postgresql
-      #- python3-psycopg2
+      - postgresql13-server-13.6
+      - postgresql13-client-13.6
+      - postgresql13-contrib-13.6_2
+      - py38-psycopg2-2.9.3
 
 - name: "Start Postgresql"
   when: funkwhale_database_managed and funkwhale_database_local
