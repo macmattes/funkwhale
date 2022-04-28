@@ -1,4 +1,4 @@
-this is my clone from the funkwhal repo, to build on freebsd 12.2
+this is my clone from the funkwhale repo, to build on freebsd 12.2
 
 
 Funkwhale ansible role
