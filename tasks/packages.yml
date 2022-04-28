@@ -3,16 +3,18 @@
   become: true
   package:
     name:
-      #- "python3"
+      - "python3-3_3"
       - "py38-pip-20.3.4"
       - "py38-certbot-1.22.0,1"
+      - "py38-ldap3-2.8.1"
+      - "py38-django-auth-ldap-4.0.0"
       #- "python3-virtualenv"
       #- "libldap2-dev"
       #- "libsasl2-dev"
-      #- "git"
-      #- "unzip"
+      - "git"
+      - "unzip"
       #- "build-essential"
-      #- "ffmpeg"
+      - "ffmpeg"
       #- "make"
       #- "libjpeg-dev"
       #- "libmagic-dev"
@@ -30,5 +32,3 @@
       - "py38-libxml2-2.9.13_4"
       - "py38-psycopg2-2.9.3"
       - "py38-Jinja2-3.0.1"
-      - "ffmpeg"
-      - "unzip"
