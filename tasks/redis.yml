@@ -4,10 +4,10 @@
   when: funkwhale_redis_managed
   package:
     name:
-      - redis-server
+      - redis-6.2.6
 
 - name: "Start redis-server"
   when: funkwhale_redis_managed
   service:
-    name: redis-server
+    name: redis
     state: started
