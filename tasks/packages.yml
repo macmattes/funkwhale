@@ -19,7 +19,7 @@
       #- "libjpeg-dev"
       #- "libmagic-dev"
       #- "libpq-dev"
-      #- "postgresql-client"
+      - "postgresql13-client-13.6"
       # Needed to build cryptography wheel sometimes
       #- libssl-dev
       #- libffi-dev
@@ -30,5 +30,4 @@
       - "libxslt-1.1.35_2"
       - "rust-1.59.0"
       - "py38-libxml2-2.9.13_4"
-      - "py38-psycopg2-2.9.3"
       - "py38-Jinja2-3.0.1"
