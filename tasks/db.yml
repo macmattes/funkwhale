@@ -4,8 +4,8 @@
   when: funkwhale_database_managed and funkwhale_database_local
   package:
     name:
-      - postgresql
-      - python3-psycopg2
+      #- postgresql
+      #- python3-psycopg2
 
 - name: "Start Postgresql"
   when: funkwhale_database_managed and funkwhale_database_local
